@@ -3,23 +3,17 @@ pipeline {
     stages {
         stage('checkout') {
             steps {
-                step {
-                    git 'https://github.com/UdemySpring/recipeApp.git'
-                }
+                git 'https://github.com/UdemySpring/recipeApp.git'
             }
         }
         stage('compile') {
             steps {
-                step {
-                    bat 'mvn clean install'
-                }
+                bat 'mvn clean install'
             }
         }
         stage('docker image') {
             steps {
-                step {
-                    bat 'mvn deploy'
-                }
+                bat 'mvn deploy'
             }
         }
     }
