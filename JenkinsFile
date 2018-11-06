@@ -33,7 +33,7 @@ pipeline {
                 }
             }
         }
-        stage('Package') {
+        stage('Packaging') {
             steps {
                 echo 'Packaging'
                 bat 'mvn package -DskipTests'
