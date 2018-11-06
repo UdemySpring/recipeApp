@@ -39,6 +39,13 @@ pipeline {
                 bat 'mvn package -DskipTests'
             }
         }
+        stage('archiving') {
+                    steps {
+                        echo 'archiving'
+                        archiveArtifacts '*.war'
+                    }
+                }
+
         stage('Deploy') {
             steps {
                 echo '## TODO DEPLOYMENT ##'
