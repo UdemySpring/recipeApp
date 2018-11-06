@@ -42,7 +42,7 @@ pipeline {
         stage('archiving artifacts') {
                     steps {
                         echo 'archiving'
-                        archiveArtifacts '*.war'
+                        archiveArtifacts '*SNAPSHOT.war'
                     }
                 }
 
