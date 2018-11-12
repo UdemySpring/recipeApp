@@ -47,10 +47,18 @@ pipeline {
                     }
                 }
 
+stage('create docker image') {
+                       steps {
+                           echo '## DOCKER IMAGE Crate##'
+                           bat 'mvn clean package dockerfile:build'
+
+
+                       }
+        }
         stage('Deploy') {
-            steps {
-                echo '## TODO DEPLOYMENT ##'
-            }
+                       steps {
+                           echo '## TODO DEPLOYMENT ##'
+                       }
         }
     }
 
