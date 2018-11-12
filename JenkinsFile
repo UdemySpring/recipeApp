@@ -1,9 +1,14 @@
 pipeline {
+    environment {
+    registry = 'akshayp07/dockerguru'
+    registryCredential = 'dockerhub'
+  }
     agent any
     stages {
         stage('Checkout') {
             steps {
                 echo 'Checkout'
+                git 'https://github.com/UdemySpring/recipeApp'
             }
         }
         stage('Build') {
@@ -33,21 +38,10 @@ pipeline {
                 }
             }
         }
-        stage('Packaging') {
-            steps {
-            build job:'jenkins job name', propagate:true, wait:true
-                echo 'Packaging'
-                bat 'mvn package -DskipTests'
-            }
-        }
-        stage('archiving artifacts') {
-                    steps {
-                        echo 'archiving'
-                        archiveArtifacts '*/*.war'
-                    }
-                }
 
-stage('create docker image') {
+
+
+        stage('create docker image') {
                        steps {
                            echo '## DOCKER IMAGE Crate##'
                            bat 'mvn clean package dockerfile:build'
@@ -55,28 +49,24 @@ stage('create docker image') {
 
                        }
         }
-        stage('Deploy') {
+
+        stage('archiving artifacts') {
+                            steps {
+                                echo 'archiving'
+                                archiveArtifacts 'target/springbootapplications-0.0.1-snapshot-docker-info.jar'
+                            }
+                        }
+        stage('images to hub') {
                        steps {
-                           echo '## TODO DEPLOYMENT ##'
+                           echo '## Docker hub push ##'
+                           bat 'docker images'
+                           script {
+      docker.withRegistry( ‘’, registryCredential ) {
+        dockerImage.push()
+      }
+    }
                        }
         }
     }
 
-    post {
-        always {
-            echo 'JENKINS PIPELINE'
-        }
-        success {
-            echo 'JENKINS PIPELINE SUCCESSFUL'
-        }
-        failure {
-            echo 'JENKINS PIPELINE FAILED'
-        }
-        unstable {
-            echo 'JENKINS PIPELINE WAS MARKED AS UNSTABLE'
-        }
-        changed {
-            echo 'JENKINS PIPELINE STATUS HAS CHANGED SINCE LAST EXECUTION'
-        }
-    }
 }

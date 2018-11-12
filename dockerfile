@@ -1,3 +1,3 @@
-FROM openjdk:8-jdk-alpine
+FROM akshayp07/dockerguru:latest
 
 EXPOSE 9080

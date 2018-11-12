@@ -93,7 +93,7 @@
                 <artifactId>dockerfile-maven-plugin</artifactId>
                 <version>1.4.3</version>
                 <configuration>
-                    <repository>${docker.image.prefix}/samplerepo</repository>
+                    <repository>${docker.image.prefix}/dockerguru</repository>
                     <tag>${project.version}</tag>
                     <buildArgs>
                         <WAR_FILE>target/${project.build.finalName}.war</WAR_FILE>

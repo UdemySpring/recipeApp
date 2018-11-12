@@ -11,4 +11,4 @@ mvn sonar:sonar
 docker tag b2876a355f28 akshayp07/samplerepo
 docker push akshayp07/samplerepo
 
-3)
+3) docker system prune -a - deletes all container
