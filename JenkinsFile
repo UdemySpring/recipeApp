@@ -35,6 +35,7 @@ pipeline {
         }
         stage('Packaging') {
             steps {
+            build job:'jenkins job name', propagate:true, wait:true
                 echo 'Packaging'
                 bat 'mvn package -DskipTests'
             }
