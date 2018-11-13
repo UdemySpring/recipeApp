@@ -54,13 +54,16 @@ pipeline {
                                 {
                                 echo 'archiving'
                                 archiveArtifacts 'target/springbootapplications-0.0.1-snapshot-docker-info.jar'
-                                 echo 'calling external job'
-                                    build job:'MyPipeline', propagate:false, wait:true
+
                                 }
 
-
-
-
+            }
+            stage('calling external job')
+            {
+            steps{
+            echo 'calling external job'
+            build job:'MyPipeline', propagate:true, wait:true
+            }
 
 
             }
