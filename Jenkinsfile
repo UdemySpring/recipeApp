@@ -3,72 +3,75 @@ pipeline {
     stages {
             stage('master call')
             {
-            steps {
-                            echo 'Checkout'
-                            git 'https://github.com/UdemySpring/recipeApp'
-                   }
-                        steps {
-                            echo 'Clean Build'
-                            bat 'mvn clean compile'
-                        }
+            steps{
+            step {
+                                        echo 'Checkout'
+                                        git 'https://github.com/UdemySpring/recipeApp'
+                               }
+                                    step {
+                                        echo 'Clean Build'
+                                        bat 'mvn clean compile'
+                                    }
 
 
-                        steps {
-                            echo 'Testing'
-                            bat 'mvn test'
-                        }
+                                    step {
+                                        echo 'Testing'
+                                        bat 'mvn test'
+                                    }
 
 
-                        steps {
-                            echo 'Code Coverage'
-                            jacoco()
-                        }
+                                    step {
+                                        echo 'Code Coverage'
+                                        jacoco()
+                                    }
 
 
-                        steps {
-                            echo 'Sonar Scanner'
+                                    step {
+                                        echo 'Sonar Scanner'
 
-                            withSonarQubeEnv('SonarQube Server') {
-                                bat 'mvn sonar:sonar'
-                            }
-                        }
-
-
-
-
-
-                                   steps {
-                                       echo '## DOCKER IMAGE Crate##'
-                                       bat 'mvn clean package dockerfile:build'
-
-
-                                   }
+                                        withSonarQubeEnv('SonarQube Server') {
+                                            bat 'mvn sonar:sonar'
+                                        }
+                                    }
 
 
 
 
 
+                                               step {
+                                                   echo '## DOCKER IMAGE Crate##'
+                                                   bat 'mvn clean package dockerfile:build'
 
-                                            steps
-                                            {
-                                            echo 'archiving'
-                                            archiveArtifacts 'target/springbootapplications-0.0.1-snapshot-docker-info.jar'
-                                             echo 'calling external job'
-                                                build job:'MyPipeline', propagate:true, wait:true
-                                            }
+
+                                               }
 
 
 
 
 
 
+                                                        step
+                                                        {
+                                                        echo 'archiving'
+                                                        archiveArtifacts 'target/springbootapplications-0.0.1-snapshot-docker-info.jar'
+                                                         echo 'calling external job'
+                                                            build job:'MyPipeline', propagate:true, wait:true
+                                                        }
 
 
-                                   steps {
-                                       echo '## Docker hub push ##'
-                                       bat 'docker images'
 
-                                   }
+
+
+
+
+
+                                               step {
+                                                   echo '## Docker hub push ##'
+                                                   bat 'docker images'
+
+                                               }
+            }
+
             }
 
 
