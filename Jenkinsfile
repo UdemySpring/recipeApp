@@ -1,80 +1,76 @@
 pipeline {
        agent any
     stages {
-            stage('master call')
+        stage('Checkout') {
+            steps {
+                echo 'Checkout'
+                git 'https://github.com/UdemySpring/recipeApp'
+            }
+        }
+        stage('Build') {
+            steps {
+                echo 'Clean Build'
+                bat 'mvn clean compile'
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Testing'
+                bat 'mvn test'
+            }
+        }
+        stage('JaCoCo') {
+            steps {
+                echo 'Code Coverage'
+                jacoco()
+            }
+        }
+        stage('Sonar') {
+            steps {
+                echo 'Sonar Scanner'
+
+                withSonarQubeEnv('SonarQube Server') {
+                    bat 'mvn sonar:sonar'
+                }
+            }
+        }
+
+
+
+        stage('create docker image') {
+                       steps {
+                           echo '## DOCKER IMAGE Crate##'
+                           bat 'mvn clean package dockerfile:build'
+
+
+                       }
+        }
+
+
+        stage('archiving artifacts')
             {
-            steps{
-            step {
-                                        echo 'Checkout'
-                                        git 'https://github.com/UdemySpring/recipeApp'
-                               }
-                                    step {
-                                        echo 'Clean Build'
-                                        bat 'mvn clean compile'
-                                    }
 
-
-                                    step {
-                                        echo 'Testing'
-                                        bat 'mvn test'
-                                    }
-
-
-                                    step {
-                                        echo 'Code Coverage'
-                                        jacoco()
-                                    }
-
-
-                                    step {
-                                        echo 'Sonar Scanner'
-
-                                        withSonarQubeEnv('SonarQube Server') {
-                                            bat 'mvn sonar:sonar'
-                                        }
-                                    }
+                                steps
+                                {
+                                echo 'archiving'
+                                archiveArtifacts 'target/springbootapplications-0.0.1-snapshot-docker-info.jar'
+                                 echo 'calling external job'
+                                    build job:'MyPipeline', propagate:false, wait:true
+                                }
 
 
 
 
 
-                                               step {
-                                                   echo '## DOCKER IMAGE Crate##'
-                                                   bat 'mvn clean package dockerfile:build'
-
-
-                                               }
-
-
-
-
-
-
-                                                        step
-                                                        {
-                                                        echo 'archiving'
-                                                        archiveArtifacts 'target/springbootapplications-0.0.1-snapshot-docker-info.jar'
-                                                         echo 'calling external job'
-                                                            build job:'MyPipeline', propagate:true, wait:true
-                                                        }
-
-
-
-
-
-
-
-
-                                               step {
-                                                   echo '## Docker hub push ##'
-                                                   bat 'docker images'
-
-                                               }
-            }
 
             }
+        stage('images to hub') {
+                       steps {
+                           echo '## Docker hub push ##'
+                           bat 'docker images'
 
-
+                       }
+        }
     }
 
 }
