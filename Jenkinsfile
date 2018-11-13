@@ -1,9 +1,5 @@
 pipeline {
-    environment {
-    registry = 'akshayp07/dockerguru'
-    registryCredential = 'dockerhub'
-  }
-    agent any
+       agent any
     stages {
         stage('Checkout') {
             steps {
@@ -32,7 +28,7 @@ pipeline {
         stage('Sonar') {
             steps {
                 echo 'Sonar Scanner'
-                //def scannerHome = tool 'SonarQube Scanner 3.0'
+
                 withSonarQubeEnv('SonarQube Server') {
                     bat 'mvn sonar:sonar'
                 }
@@ -50,21 +46,29 @@ pipeline {
                        }
         }
 
-        stage('archiving artifacts') {
-                            steps {
+
+        stage('archiving artifacts')
+            {
+
+                                steps
+                                {
                                 echo 'archiving'
                                 archiveArtifacts 'target/springbootapplications-0.0.1-snapshot-docker-info.jar'
-                            }
-                        }
+                                 echo 'calling external job'
+                                    build job:'MyPipeline', propagate:true, wait:true
+                                }
+
+
+
+
+
+
+            }
         stage('images to hub') {
                        steps {
                            echo '## Docker hub push ##'
                            bat 'docker images'
-                           script {
-      docker.withRegistry( ‘’, registryCredential ) {
-        dockerImage.push()
-      }
-    }
+
                        }
         }
     }
