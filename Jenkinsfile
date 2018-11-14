@@ -11,7 +11,7 @@ pipeline {
           stage('anothe file call') {
                                steps {
                                    echo '##another file call ##'
-                                   build job:'C://Users//1024466//IdeaProjects//recipeApp//Jenkins//Jenkinsfile1', propagate:true, wait:true
+                                   build job:'C:\Users\1024466\IdeaProjects\recipeApp\Jenkins\Jenkinsfile1', propagate:true, wait:true
 
                                }
                 }
