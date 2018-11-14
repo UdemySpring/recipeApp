@@ -11,7 +11,7 @@ pipeline {
           stage('anothe file call') {
                                steps {
                                    echo '##another file call ##'
-                                   bat 'C:\Users\1024466\IdeaProjects\recipeApp\Jenkins'
+                                   bat 'C://Users//1024466//IdeaProjects//recipeApp//Jenkins'
 
                                }
                 }
