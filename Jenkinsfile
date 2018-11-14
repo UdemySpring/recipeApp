@@ -34,28 +34,23 @@ pipeline {
                 }
             }
         }
-
-
-
         stage('create docker image') {
-                       steps {
+             steps {
                            echo '## DOCKER IMAGE Crate##'
                            bat 'mvn clean package dockerfile:build'
 
 
-                       }
+                   }
         }
 
 
-        stage('archiving artifacts')
-            {
+        stage('archiving artifacts') {
 
-                                steps
-                                {
+              steps {
                                 echo 'archiving'
                                 archiveArtifacts 'target/springbootapplications-0.0.1-snapshot-docker-info.jar'
 
-                                }
+                    }
 
             }
             stage('calling external job')
@@ -75,5 +70,4 @@ pipeline {
                        }
         }
     }
-
 }
